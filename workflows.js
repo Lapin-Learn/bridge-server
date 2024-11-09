@@ -1,5 +1,10 @@
 import { workflow } from "@novu/framework";
 import { z } from "zod";
+import {
+  resetPassworControllSchema,
+  resetPasswordPayloadSchema,
+} from "./schemas.js";
+import { renderTemplate } from "./utils.js";
 
 export const testWorkflow = workflow(
   "test-workflow",
@@ -25,5 +30,26 @@ export const testWorkflow = workflow(
     payloadSchema: z.object({
       userName: z.string().default("John Doe"),
     }),
+  },
+);
+
+export const sentOtpWorkflow = workflow(
+  "send-otp-workflow",
+  async ({ step, payload }) => {
+    await step.email(
+      "send-otp",
+      async (controls) => {
+        return {
+          subject: controls.subject,
+          body: await renderTemplate("reset-password", payload),
+        };
+      },
+      {
+        controlSchema: resetPassworControllSchema,
+      },
+    );
+  },
+  {
+    payloadSchema: resetPasswordPayloadSchema,
   },
 );
