@@ -6,7 +6,9 @@ const app = express();
 app.use(express.json());
 app.use("/api/novu", serve({ workflows: [testWorkflow] }));
 
-//await publishWorkflows();
+app.get("/", (req, res) => {
+  res.status(200).send("pong");
+});
 
 app.listen(4000, () => {
   console.log("Server is running on port 4000");
