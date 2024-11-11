@@ -2,9 +2,9 @@ import { workflow } from "@novu/framework";
 import { z } from "zod";
 import {
   profileStreakActivitySchema,
+  remindStreakControllSchema,
   resetPasswordPayloadSchema,
   sendMailControllSchema,
-  sendMailPayloadSchema,
 } from "./schemas.js";
 import { renderTemplate } from "./utils.js";
 
@@ -36,19 +36,11 @@ export const testWorkflow = workflow(
 );
 
 export const sentOtpWorkflow = workflow(
-  "send-mail-workflow",
+  "send-otp-workflow",
   async ({ step, payload }) => {
     await step.email(
-      "send-data-to-mail",
+      "send-mail",
       async (controls) => {
-        let schema;
-        if (payload.templateName === "reset-password") {
-          schema = resetPasswordPayloadSchema;
-        } else {
-          schema = profileStreakActivitySchema;
-        }
-
-        payload.data = schema.parse(payload.data);
         return {
           subject: controls.subject,
           body: await renderTemplate(payload.templateName, payload.data),
@@ -60,6 +52,27 @@ export const sentOtpWorkflow = workflow(
     );
   },
   {
-    payloadSchema: sendMailPayloadSchema,
+    payloadSchema: resetPasswordPayloadSchema,
+  },
+);
+
+export const remindStreakWorkflow = workflow(
+  "remind-streak-workflow",
+  async ({ step, payload }) => {
+    await step.email(
+      "send-mail",
+      async (controls) => {
+        return {
+          subject: controls.subject,
+          body: await renderTemplate(payload.templateName, payload.data),
+        };
+      },
+      {
+        controlSchema: remindStreakControllSchema,
+      },
+    );
+  },
+  {
+    payloadSchema: profileStreakActivitySchema,
   },
 );

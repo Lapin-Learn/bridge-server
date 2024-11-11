@@ -1,6 +1,10 @@
 import express from "express";
 import { serve } from "@novu/framework/express";
-import { testWorkflow, sentOtpWorkflow } from "./workflows.js";
+import {
+  testWorkflow,
+  sentOtpWorkflow,
+  remindStreakWorkflow,
+} from "./workflows.js";
 import { Novu } from "@novu/node";
 import dotenv from "dotenv";
 import { renderTemplate } from "./utils.js";
@@ -9,7 +13,10 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use("/api/novu", serve({ workflows: [testWorkflow, sentOtpWorkflow] }));
+app.use(
+  "/api/novu",
+  serve({ workflows: [testWorkflow, sentOtpWorkflow, remindStreakWorkflow] }),
+);
 
 app.get("/", (req, res) => {
   res.status(200).send("pong");
