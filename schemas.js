@@ -2,7 +2,7 @@ import { z } from "zod";
 import { templateNameEnum } from "./enum.js";
 
 export const sendMailControllSchema = z.object({
-  subject: z.string().default("[LapinLearn] Subject"),
+  subject: z.string().default("{{subject}}"),
 });
 
 export const resetPasswordPayloadSchema = z.object({
@@ -36,5 +36,6 @@ export const sendMailPayloadSchema = z.object({
   templateName: z
     .enum([templateNameEnum.RESET_PASSWORD, templateNameEnum.REMIND_STREAK])
     .default(templateNameEnum.RESET_PASSWORD),
+  subject: z.string().default("Subject"),
   data: z.union([resetPasswordPayloadSchema, profileStreakActivitySchema]),
 });

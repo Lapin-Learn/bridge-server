@@ -48,7 +48,7 @@ export const sentOtpWorkflow = workflow(
           schema = profileStreakActivitySchema;
         }
 
-        payload.data = schema.parse(payload);
+        payload.data = schema.parse(payload.data);
         return {
           subject: controls.subject,
           body: await renderTemplate(payload.templateName, payload.data),
