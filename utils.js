@@ -3,6 +3,10 @@ import handlebars from "handlebars";
 import path from "path";
 import { fileURLToPath } from "url";
 
+handlebars.registerHelper("isStatus", function (value, status, options) {
+  return value === status ? options.fn(this) : options.inverse(this);
+});
+
 export async function renderTemplate(templateName, data) {
   try {
     // Resolve the directory and template path

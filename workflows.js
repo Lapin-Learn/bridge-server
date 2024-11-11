@@ -1,8 +1,10 @@
 import { workflow } from "@novu/framework";
 import { z } from "zod";
 import {
-  resetPassworControllSchema,
+  profileStreakActivitySchema,
   resetPasswordPayloadSchema,
+  sendMailControllSchema,
+  sendMailPayloadSchema,
 } from "./schemas.js";
 import { renderTemplate } from "./utils.js";
 
@@ -34,22 +36,30 @@ export const testWorkflow = workflow(
 );
 
 export const sentOtpWorkflow = workflow(
-  "send-otp-workflow",
+  "send-mail-workflow",
   async ({ step, payload }) => {
     await step.email(
-      "send-otp",
+      "send-data-to-mail",
       async (controls) => {
+        let schema;
+        if (payload.templateName === "reset-password") {
+          schema = resetPasswordPayloadSchema;
+        } else {
+          schema = profileStreakActivitySchema;
+        }
+
+        payload.data = schema.parse(payload);
         return {
           subject: controls.subject,
-          body: await renderTemplate("reset-password", payload),
+          body: await renderTemplate(payload.templateName, payload.data),
         };
       },
       {
-        controlSchema: resetPassworControllSchema,
+        controlSchema: sendMailControllSchema,
       },
     );
   },
   {
-    payloadSchema: resetPasswordPayloadSchema,
+    payloadSchema: sendMailPayloadSchema,
   },
 );
