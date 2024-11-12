@@ -1,8 +1,13 @@
 import { workflow } from "@novu/framework";
 import { z } from "zod";
 import {
+  announceStreakMilestoneControllSchema,
+  announceStreakMilestonePayloadSchema,
   profileStreakActivitySchema,
+  remindMissingStreakControllSchema,
+  remindMissingStreakPayloadSchema,
   remindStreakControllSchema,
+  remindStreakPayloadSchema,
   resetPasswordPayloadSchema,
   sendMailControllSchema,
 } from "./schemas.js";
@@ -73,6 +78,48 @@ export const remindStreakWorkflow = workflow(
     );
   },
   {
-    payloadSchema: profileStreakActivitySchema,
+    payloadSchema: remindStreakPayloadSchema,
+  },
+);
+
+export const remindMissingStreakWorkflow = workflow(
+  "remind-missing-streak-workflow",
+  async ({ step, payload }) => {
+    await step.email(
+      "send-mail",
+      async (controls) => {
+        return {
+          subject: controls.subject,
+          body: await renderTemplate(payload.templateName, payload.data),
+        };
+      },
+      {
+        controlSchema: remindMissingStreakControllSchema,
+      },
+    );
+  },
+  {
+    payloadSchema: remindMissingStreakPayloadSchema,
+  },
+);
+
+export const announceStreakMilestoneWorkflow = workflow(
+  "announce-streak-milestone-workflow",
+  async ({ step, payload }) => {
+    await step.email(
+      "send-mail",
+      async (controls) => {
+        return {
+          subject: controls.subject,
+          body: await renderTemplate(payload.templateName, payload.data),
+        };
+      },
+      {
+        controlSchema: announceStreakMilestoneControllSchema,
+      },
+    );
+  },
+  {
+    payloadSchema: announceStreakMilestonePayloadSchema,
   },
 );

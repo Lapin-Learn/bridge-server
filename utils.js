@@ -7,6 +7,10 @@ handlebars.registerHelper("isStatus", function (value, status, options) {
   return value === status ? options.fn(this) : options.inverse(this);
 });
 
+handlebars.registerHelper("add", function (value1, value2) {
+  return parseInt(value1) + parseInt(value2);
+});
+
 export async function renderTemplate(templateName, data) {
   try {
     // Resolve the directory and template path

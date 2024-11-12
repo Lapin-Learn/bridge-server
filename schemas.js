@@ -13,6 +13,20 @@ export const remindStreakControllSchema = z.object({
     ),
 });
 
+export const remindMissingStreakControllSchema = z.object({
+  subject: z
+    .string()
+    .default("Chào {{data.username}}, cùng bắt đầu lại chuỗi streak nhé!"),
+});
+
+export const announceStreakMilestoneControllSchema = z.object({
+  subject: z
+    .string()
+    .default(
+      "Chào {{data.username}}! Nối dài chuỗi {{data.currentStreak}} ngày học IELTS nào!",
+    ),
+});
+
 export const resetPasswordPayloadSchema = z.object({
   templateName: z.string().default(templateNameEnum.RESET_PASSWORD),
   data: z.object({ otp: z.string().length(6).default("123456") }),
@@ -20,7 +34,7 @@ export const resetPasswordPayloadSchema = z.object({
 });
 
 export const profileStreakActivitySchema = z.object({
-  templateName: z.string().default(templateNameEnum.REMIND_STREAK),
+  templateName: z.string(),
   data: z.object({
     username: z.string().default("bddquan"),
     currentStreak: z.number().int().default(10),
@@ -44,3 +58,19 @@ export const profileStreakActivitySchema = z.object({
       ]),
   }),
 });
+
+export const remindStreakPayloadSchema = profileStreakActivitySchema.extend({
+  templateName: z.string().default(templateNameEnum.REMIND_STREAK),
+});
+
+export const remindMissingStreakPayloadSchema =
+  profileStreakActivitySchema.extend({
+    templateName: z.string().default(templateNameEnum.REMIND_MISSING_STREAK),
+  });
+
+export const announceStreakMilestonePayloadSchema =
+  profileStreakActivitySchema.extend({
+    templateName: z
+      .string()
+      .default(templateNameEnum.ANNOUNCE_STREAK_MILESTONE),
+  });

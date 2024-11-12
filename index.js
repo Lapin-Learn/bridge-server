@@ -4,6 +4,8 @@ import {
   testWorkflow,
   sentOtpWorkflow,
   remindStreakWorkflow,
+  remindMissingStreakWorkflow,
+  announceStreakMilestoneWorkflow,
 } from "./workflows.js";
 import { Novu } from "@novu/node";
 import dotenv from "dotenv";
@@ -15,7 +17,15 @@ const app = express();
 app.use(express.json());
 app.use(
   "/api/novu",
-  serve({ workflows: [testWorkflow, sentOtpWorkflow, remindStreakWorkflow] }),
+  serve({
+    workflows: [
+      testWorkflow,
+      sentOtpWorkflow,
+      remindStreakWorkflow,
+      remindMissingStreakWorkflow,
+      announceStreakMilestoneWorkflow,
+    ],
+  }),
 );
 
 app.get("/", (req, res) => {
