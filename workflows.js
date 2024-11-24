@@ -3,13 +3,13 @@ import { z } from "zod";
 import {
   announceStreakMilestoneControllSchema,
   announceStreakMilestonePayloadSchema,
-  profileStreakActivitySchema,
   remindMissingStreakControllSchema,
   remindMissingStreakPayloadSchema,
   remindStreakControllSchema,
   remindStreakPayloadSchema,
   resetPasswordPayloadSchema,
   sendMailControllSchema,
+  verifyEmailPayloadSchema,
 } from "./schemas.js";
 import { renderTemplate } from "./utils.js";
 
@@ -121,5 +121,26 @@ export const announceStreakMilestoneWorkflow = workflow(
   },
   {
     payloadSchema: announceStreakMilestonePayloadSchema,
+  },
+);
+
+export const verifyEmailWorkflow = workflow(
+  "verify-email-workflow",
+  async ({ step, payload }) => {
+    await step.email(
+      "send-mail",
+      async (controls) => {
+        return {
+          subject: controls.subject,
+          body: await renderTemplate(payload.templateName, payload.data),
+        };
+      },
+      {
+        controlSchema: sendMailControllSchema,
+      },
+    );
+  },
+  {
+    payloadSchema: verifyEmailPayloadSchema,
   },
 );

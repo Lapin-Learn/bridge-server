@@ -6,6 +6,7 @@ import {
   remindStreakWorkflow,
   remindMissingStreakWorkflow,
   announceStreakMilestoneWorkflow,
+  verifyEmailWorkflow,
 } from "./workflows.js";
 import { Novu } from "@novu/node";
 import dotenv from "dotenv";
@@ -24,6 +25,7 @@ app.use(
       remindStreakWorkflow,
       remindMissingStreakWorkflow,
       announceStreakMilestoneWorkflow,
+      verifyEmailWorkflow,
     ],
   }),
 );

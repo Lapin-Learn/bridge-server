@@ -33,6 +33,12 @@ export const resetPasswordPayloadSchema = z.object({
   subject: z.string().default("[NO-REPLY] LapinLearn Reset Password"),
 });
 
+export const verifyEmailPayloadSchema = z.object({
+  templateName: z.string().default(templateNameEnum.VERIFY_MAIL),
+  data: z.object({ otp: z.string().length(6).default("123456") }),
+  subject: z.string().default("Welcome to LapinLearn"),
+});
+
 export const profileStreakActivitySchema = z.object({
   templateName: z.string(),
   data: z.object({
