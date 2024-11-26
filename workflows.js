@@ -40,8 +40,8 @@ export const testWorkflow = workflow(
   },
 );
 
-export const sentOtpWorkflow = workflow(
-  "send-otp-workflow",
+export const resetPasswordWorkflow = workflow(
+  "reset-password-workflow",
   async ({ step, payload }) => {
     await step.email(
       "send-mail",

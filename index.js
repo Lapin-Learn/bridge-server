@@ -2,7 +2,7 @@ import express from "express";
 import { serve } from "@novu/framework/express";
 import {
   testWorkflow,
-  sentOtpWorkflow,
+  resetPasswordWorkflow,
   remindStreakWorkflow,
   remindMissingStreakWorkflow,
   announceStreakMilestoneWorkflow,
@@ -21,7 +21,7 @@ app.use(
   serve({
     workflows: [
       testWorkflow,
-      sentOtpWorkflow,
+      resetPasswordWorkflow,
       remindStreakWorkflow,
       remindMissingStreakWorkflow,
       announceStreakMilestoneWorkflow,
